@@ -1,0 +1,138 @@
+
+<html lang="en">
+<head>
+  <script src="pyodidescript.js"></script> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+  <script src="pyodidescript.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <title>Code Text Editor Window</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="presentation">
+      <h1>Code Text Editor Window</h1>
+      <p>Write your code in the window below and click on the "Run" button to execute it.</p>
+    </div>
+  </div>
+  <main>
+    <div id="container" class="center">
+      
+      <div class="window">
+        <header>
+          <div class="circle red"></div>
+          <div class="circle yellow"></div>
+          <div class="circle green"></div>
+        </header>
+        <section>
+          <div id="code" name="code" class="code" contenteditable="true">
+            <span class="keyword">main</span> {
+              <span class="keyword">set</span> arr = [1,2,3,4,5]
+              <span class="keyword">print</span> arr
+              <span class="keyword">set</span> y = 1
+              <span class="keyword">set</span> x = 0
+              <span class="keyword">set</span> z = 0
+              <span class="keyword">set</span> counter = 1
+              
+              <span class="keyword">while</span> y <span class="operator">LEQ</span> 10 <span class="keyword">then</span>
+                  <span class="keyword">if</span> y % 2 <span class="operator">EQ</span> 0 <span class="operator">AND</span> x <span class="operator">GEQ</span> 0 <span class="keyword">then</span>
+                      <span class="keyword">print</span> "Entro nell if"
+                      <span class="keyword">for</span> <span class="keyword">set</span> i <span class="keyword">in</span> <span class="keyword">range</span> (1, 5) <span class="keyword">then</span>
+                          <span class="keyword">print</span> "FOR: i = " + i
+                      <span class="keyword">endfor</span>
+                      <span class="keyword">print</span> "X vale " + x
+                  <span class="keyword">else</span>
+                      <span class="keyword">print</span> "Entro nell else"
+                      <span class="keyword">while</span> counter <span class="operator">LT</span> 5 <span class="keyword">then</span>
+                          <span class="keyword">print</span> "WHILE: counter = " + counter
+                          <span class="keyword">set</span> z = z + counter
+                          <span class="keyword">set</span> counter = counter + 1
+                      <span class="keyword">endwhile</span>
+                      <span class="keyword">set</span> counter = 1
+                      <span class="keyword">print</span> "Z vale " + z
+                  <span class="keyword">endif</span>
+                  <span class="keyword">set</span> y = y + 1
+              <span class="keyword">endwhile</span>
+          }</textarea>
+        </section>
+        
+      </div>
+      
+      <div>
+        <button onclick="evaluatePython()">Run</button>
+        <br />
+        <br />
+      </div>
+      <textarea id="output" class="output" rows="6" disabled></textarea>
+  </main>
+  
+  <script>
+    const words=["if","else","while","do","for","in","range","set","print","main","endfor","endwhile","endif","then"]
+    const operators=["LEQ","GEQ","EQ","LT","GT","AND","OR","NOT","EQ","NEQ","mod","div","true","false"]
+    document.getElementById('code').addEventListener('keydown', function(e) {
+      console.log(e.key)
+      const sel = window.getSelection();
+      const node = sel.focusNode;
+      const offset = sel.focusOffset;
+      const pos = getCursorPosition(this, node, offset, { pos: 0, done: false });
+  if (offset === 0) pos.pos += 0.5;
+    if (e.key==' '){
+      console.log("space");
+      let text = this.innerText;
+      const regex = /(?<=^([^"]|"[^"]*")*)(?:if|else|while|do|for|in|range|set|print|main|endfor|endwhile|endif|then)/g;
+      const regex2 = /(?<=^([^"]|"[^"]*")*)(?:LEQ|GEQ|EQ|LT|GT|AND|OR|NOT|EQ|NEQ|mod|div|true|false)/g;
+      text = text.replace(regex, '<span class="keyword">$&</span>');
+      text = text.replace(regex2, '<span class="operator">$&</span>');
+      
+      this.innerHTML=text;
+      sel.removeAllRanges();
+      const range = setCursorPosition(this, document.createRange(), {
+      pos: pos.pos,
+      done: false,
+    });
+  range.collapse(true);
+  sel.addRange(range);
+    }
+  });
+  window.onload = function(){
+    const output = document.getElementById("output");
+        const code = document.getElementById("code");
+        };
+        
+        function addToOutput(s) {
+          output.value += ">>>" + code.innerText + "\nOUTPUT:\n" + s + "\n";
+        }
+        output.value = "Initializing...\n";
+        // init Pyodide
+        async function main() {
+          let pyodide = await loadPyodide();
+          output.value += "Ready!\n";
+          let zipResponse = await fetch("PythonParser.zip");
+          let zipBinary = await zipResponse.arrayBuffer();
+          pyodide.unpackArchive(zipBinary, "zip");
+          return pyodide;
+        }
+        let pyodideReadyPromise = main();
+        async function evaluatePython() {
+          let pyodide = await pyodideReadyPromise;
+          pyodide.FS.writeFile("/hello.txt", code.innerText, { encoding: "utf8" });
+          console.log(code.innerText);
+          try {
+            let output = pyodide.runPython(
+              `from Program import *
+with open("/hello.txt", "r") as fh:
+  data = fh.read()
+
+import sys\nimport io\nsys.stdout=io.StringIO()\nprog=Program(data)\nres = prog.mainBlock()\nprog.values()\nsys.stdout.getvalue()`
+            );
+            addToOutput(output);
+          } catch (err) {
+            addToOutput(err);
+          }
+        }
+  </script>
+</body>
+</html>

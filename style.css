@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body { height: 100%; }
+  
+  body {
+    background: linear-gradient(to right, #0acffe 0%, #495aff 100%);
+  }
+  .container {
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+  h1 {
+    font-family: 'Input Mono Narrow', 'Courier New', Courier, monospace;
+    font-size: 2.5em;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  p {
+    font-family: 'Input Mono Narrow', 'Courier New', Courier, monospace;
+    font-size: 1.5em;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  #container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+     
+  }
+  
+  .window {
+    min-width: 200px;
+    min-height: 128px;
+    width: 700px;
+    height: 280px;
+    background-color:#232730;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, .3);
+    
+    overflow: fixed;
+  }
+  
+  .window header {
+    height: 8%;
+    display: flex;
+    justify-content: start;
+    margin-bottom: 16px;
+  }
+  
+  .window section {
+    padding: 0 0;
+    height: 80%;
+  }
+  
+  .circle {
+    border-radius:50%;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-color: red;
+  }
+  
+  .circle:hover {
+    cursor: pointer;
+  }
+  
+  .red { background-color: #C40A0F; }
+  .yellow { background-color: #F29F25; }
+  .green { background-color: #8D9E2B; }
+  .keyword { color: #F29F25; }
+  .operator { color: #3c74f5; }
+  textarea {
+    width: 100%;
+    height: 100%;
+    background-color: #232730;
+    color: #fff;
+    border: none;
+    resize: none;
+    outline: none;
+  }
+  .output{
+    background-color: #232730;
+    color: #fff;
+    border: none;
+    resize: vertical;
+    outline: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    margin-right: 60px;
+    margin-top: 10px;
+    max-width: 700px;
+  }
+/* cool button */
+  button{
+    background: linear-gradient(to right, #2abfe4 0%, #2634ac 100%);
+    color: #fff;
+    border: none;
+    resize: none;
+    outline: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+
+  .code{
+    font-family: 'Input Mono Narrow', 'Courier New', Courier, monospace;
+    background-color: #232730;
+    color: #fff;
+    border: none;
+    resize: none;
+    outline: none;
+    max-height: 100%;
+    scroll-behavior: auto;
+    white-space: pre;
+    overflow: auto;
+  }

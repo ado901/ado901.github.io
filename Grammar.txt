@@ -1,0 +1,32 @@
+Sintassi grammatica:
+
+-> {} = opzionale, può esserci (una o infinite volte) come può non esserci.
+-> ('a' | 'b') = c'è sicuramente a o b.
+-> '(' a ')' = c'è (a), quindi '(' legge la parentesi nel testo, non come il caso precedente che indica l'or.
+
+
+
+Grammatica:
+
+program = {func} mainBlock
+
+func = 'func' name '(' (name | {name ','} name) ')' '{' {stmt} '}'
+
+mainBlock = 'main' '{' {stmt} '}'
+
+stmt = (
+    'if' cond 'then' stmt {stmt} ({'elseif' cond 'then' stmt {stmt}} 'else' stmt {stmt} | 'else' stmt {stmt}) 'endif' |
+    'while' cond 'then' {stmt} 'endwhile' |
+    'do' {stmt} 'whiledo' cond |
+    'for' 'set' var 'in' 'range' '(' (num | var) ',' (num | var) ')' 'then' {stmt} 'endfor' |
+    'print' expr |
+    'set' var '=' expr |
+)
+
+cond = expr ('EQ' | 'NEQ' | 'GEQ' | 'LEQ' | 'GT' | 'LT') expr {('AND' | 'OR') expr ('EQ' | 'NEQ' | 'GEQ' | 'LEQ' | 'GT' | 'LT') expr}
+
+expr = term {( '+' | '-' ) term}
+
+term = factor {( '*' | '/' | '%') factor}
+
+factor = '-' factor | '(' expr ')' | string | list | var | num
