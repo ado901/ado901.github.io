@@ -112,7 +112,8 @@ document.getElementById('code').addEventListener('keydown', function(e) {
           try {
             let output = pyodide.runPython(
               `from Program import *
-
+with open("/hello.txt", "r") as f:
+    data = f.read()
 import sys\nimport io\nsys.stdout=io.StringIO()\nprog=Program(data)\nres = prog.mainBlock()\nprog.values()\nsys.stdout.getvalue()`
             );
             addToOutput(output);
