@@ -29,7 +29,34 @@
         </header>
         <section>
           <textarea id="code" name="code" class="code">
-
+main {
+  set arr = [2, 3, 4]
+  print arr
+  set y = 1
+  set x = 0
+  set z = 0
+  set counter = 1
+  
+  while y LEQ 10 then
+      if y % 2 EQ 0 AND x GEQ 0 then
+          print "Entro nell if"
+          for set i in range (1, 5) then
+              print "FOR: i = " + i
+          endfor
+          print "X vale " + x
+      else
+          print "Entro nell else"
+          while counter LT 5 then
+              print "WHILE: counter = " + counter
+              set z = z + counter
+              set counter = counter + 1
+          endwhile
+          set counter = 1
+          print "Z vale " + z
+      endif
+      set y = y + 1
+  endwhile
+}
           </textarea>
         </section>
         
