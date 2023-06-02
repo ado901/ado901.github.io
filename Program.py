@@ -50,9 +50,9 @@ class Program:
             exit(1)
         right_expr = self.expr()
         if logic_op == 'AND':
-            return prev_outcome and self._binary_cond_funcs[cond_op](left_expr, right_expr)
+            return self._binary_cond_funcs[cond_op](left_expr, right_expr) and prev_outcome
         elif logic_op == 'OR':
-            return prev_outcome or self._binary_cond_funcs[cond_op](left_expr, right_expr)
+            return self._binary_cond_funcs[cond_op](left_expr, right_expr) or prev_outcome
         else:
             return self._binary_cond_funcs[cond_op](left_expr, right_expr)
 
@@ -83,7 +83,7 @@ class Program:
         self._tok.consume(x="=", error=f"ERROR: {Error.EQ_MISS.value} (Variable name: {name}).")
         value = self.expr()
         # print(f"DEBUG: stmt SET (var={name}, val={value}) (fake={fake}):")
-        if not fake and not self._act.set(name, value):
+        if not self._act.set(name, value) and not fake:
             print(f"ERROR: Error during variable assignment (variable name: {name})")
             exit(1)
 
@@ -173,7 +173,7 @@ class Program:
         while nxt == "elseif":
             must_else = True
             self._tok.consume(nxt)
-            condition = (not satisfied_condition) and self.__cond()
+            condition = self.__cond and (not satisfied_condition)
             if condition:
                 satisfied_condition = True
             if fake:
