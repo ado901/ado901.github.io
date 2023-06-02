@@ -173,7 +173,7 @@ class Program:
         while nxt == "elseif":
             must_else = True
             self._tok.consume(nxt)
-            condition = self.__cond and (not satisfied_condition)
+            condition = self.__cond() and (not satisfied_condition)
             if condition:
                 satisfied_condition = True
             if fake:
